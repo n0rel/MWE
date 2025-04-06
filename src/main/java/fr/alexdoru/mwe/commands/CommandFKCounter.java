@@ -4,6 +4,7 @@ import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.gui.guiapi.GuiManager;
 import fr.alexdoru.mwe.utils.MapUtil;
+import fr.alexdoru.mwe.features.FinalKillCounter;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
@@ -47,6 +48,9 @@ public class CommandFKCounter extends MyAbstractCommand {
             }
 
             ChatUtil.addChatMessage(strBuilder.toString());
+        } else if (args.length == 1 && args[0].equalsIgnoreCase("clear")) {
+
+            removeAllPlayers();
 
         } else if (args.length == 2 && args[0].equalsIgnoreCase("remove")) {
 
@@ -127,6 +131,36 @@ public class CommandFKCounter extends MyAbstractCommand {
             }
         }
         ChatUtil.addChatMessage(EnumChatFormatting.RED + "Cannot find " + playerName + " in the FKCounter.");
+    }
+
+    /**
+     * Removes ALL players from the final kill array.
+     * The reason for this is due to wanting to reset all finals just before deathmatch starts.
+     * 
+     * The implementation imitates `removePlayer` due to me not being proficient with the
+     * codebase yet, and not wanting to redesign other classes
+     */
+    private void removeAllPlayers() {
+        final HashMap<String, Integer>[] teamKillsArray = getTeamKillsArray();
+        if (teamKillsArray != null) {
+            for (int team = 0; team < TEAMS; team++) {
+                for (Map.Entry<String, Integer> player : teamKillsArray[team].entrySet()) {
+                    String playerName = player.getKey();
+                    Integer playerKills = player.getValue();
+
+                    if (playerKills != null) {
+                        removeKilledPlayer(playerName, team);
+                        GuiManager.fkCounterHUD.updateDisplayText();
+                        ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "Removed " + getColorPrefixFromTeam(team) + playerName
+                                + EnumChatFormatting.GREEN + " with " + EnumChatFormatting.GOLD + playerKills + EnumChatFormatting.GREEN + " final" + (playerKills > 1 ? "s" : "") + " from the " + getColorPrefixFromTeam(team) + getTeamNameFromTeam(team) + EnumChatFormatting.GREEN + " team.");
+                        return;
+                    }
+                
+                }
+
+            }
+        }
+        ChatUtil.addChatMessage(EnumChatFormatting.RED + "No finals initialized, couldn't clear what doesnt exist");
     }
 
     private ArrayList<String> getPlayerListInKillCounter() {
