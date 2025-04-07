@@ -137,30 +137,20 @@ public class CommandFKCounter extends MyAbstractCommand {
      * Removes ALL players from the final kill array.
      * The reason for this is due to wanting to reset all finals just before deathmatch starts.
      * 
-     * The implementation imitates `removePlayer` due to me not being proficient with the
-     * codebase yet, and not wanting to redesign other classes
+     * This function should not add the player to the `deadPlayers` list
+     * nor block them from being able to get more finals
      */
     private void removeAllPlayers() {
         final HashMap<String, Integer>[] teamKillsArray = getTeamKillsArray();
         if (teamKillsArray != null) {
             for (int team = 0; team < TEAMS; team++) {
-                for (Map.Entry<String, Integer> player : teamKillsArray[team].entrySet()) {
-                    String playerName = player.getKey();
-                    Integer playerKills = player.getValue();
-
-                    if (playerKills != null) {
-                        removeKilledPlayer(playerName, team);
-                        GuiManager.fkCounterHUD.updateDisplayText();
-                        ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "Removed " + getColorPrefixFromTeam(team) + playerName
-                                + EnumChatFormatting.GREEN + " with " + EnumChatFormatting.GOLD + playerKills + EnumChatFormatting.GREEN + " final" + (playerKills > 1 ? "s" : "") + " from the " + getColorPrefixFromTeam(team) + getTeamNameFromTeam(team) + EnumChatFormatting.GREEN + " team.");
-                        return;
-                    }
-                
-                }
-
+                clearAllKilledPlayersFromTeam(team);
             }
+            GuiManager.fkCounterHUD.updateDisplayText();
+            ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "Reset all final kills, good luck in deathmatch!");
+        } else {
+            ChatUtil.addChatMessage(EnumChatFormatting.RED + "No finals initialized, couldn't clear what doesnt exist");
         }
-        ChatUtil.addChatMessage(EnumChatFormatting.RED + "No finals initialized, couldn't clear what doesnt exist");
     }
 
     private ArrayList<String> getPlayerListInKillCounter() {

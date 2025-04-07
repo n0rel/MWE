@@ -312,6 +312,29 @@ public class FinalKillCounter {
         removeKilledPlayer(player, getColorPrefixFromTeam(team).replace("§", ""));
     }
 
+    
+    /**
+     *  Removes all players from a specific team
+     *  from the fkcounter but does not
+     *  add them to the deadPlayers list.
+     * 
+     *  Useful for when wanting to wipe everyones finals
+     *  but continue to allow them to gain more final kills.
+     * 
+     *  This method will work as expected if, and only if,
+     *  `teamKillsArray` is updated to include the same players as
+     *  `allPlayerKills`. Otherwise, unexpected behavior will occur
+     */
+    public static void clearAllKilledPlayersFromTeam(int team) {
+
+        for (Map.Entry<String, Integer> player : teamKillsArray[team].entrySet()) {
+            String playerName = player.getKey();
+            allPlayerKills.remove(playerName);
+            updateNetworkPlayerinfo(playerName, 0);
+        }
+        teamKillsArray[team].clear();
+    }
+
     /**
      * Removes a player from the fkcounter and returns the amount of finals the
      * player had when successfull, returns -1 otherwise.
