@@ -156,6 +156,16 @@ public class FinalKillCounter {
         GuiManager.fkCounterHUD.updateDisplayText();
     }
 
+    @SubscribeEvent
+    public void onDeathmatch(MegaWallsGameEvent event) {
+        if (
+            event.getType() == MegaWallsGameEvent.EventType.DEATHMATCH_START
+            && MWEConfig.clearFkcounterOnDM
+        ) {
+            removeAllPlayers();
+        }
+    }
+
     /**
      * Resets the Killcounter and assigns it to a new game ID
      */
@@ -174,6 +184,26 @@ public class FinalKillCounter {
             }
         });
         GuiManager.fkCounterHUD.updateDisplayText();
+    }
+
+    /**
+     * Removes ALL players from the final kill array.
+     * The reason for this is due to wanting to reset all finals just before deathmatch starts.
+     * 
+     * This function should not add the player to the `deadPlayers` list
+     * nor block them from being able to get more finals
+     */
+    public static void removeAllPlayers() {
+        final HashMap<String, Integer>[] teamKillsArray = getTeamKillsArray();
+        if (teamKillsArray != null) {
+            for (int team = 0; team < TEAMS; team++) {
+                clearAllKilledPlayersFromTeam(team);
+            }
+            GuiManager.fkCounterHUD.updateDisplayText();
+            ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "Reset all final kills, good luck in deathmatch!");
+        } else {
+            ChatUtil.addChatMessage(EnumChatFormatting.RED + "No finals initialized, couldn't clear what doesnt exist");
+        }
     }
 
     public static boolean processMessage(ClientChatReceivedEvent event, String formattedText, String unformattedText) {

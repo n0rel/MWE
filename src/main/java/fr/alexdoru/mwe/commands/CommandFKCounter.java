@@ -133,25 +133,6 @@ public class CommandFKCounter extends MyAbstractCommand {
         ChatUtil.addChatMessage(EnumChatFormatting.RED + "Cannot find " + playerName + " in the FKCounter.");
     }
 
-    /**
-     * Removes ALL players from the final kill array.
-     * The reason for this is due to wanting to reset all finals just before deathmatch starts.
-     * 
-     * This function should not add the player to the `deadPlayers` list
-     * nor block them from being able to get more finals
-     */
-    private void removeAllPlayers() {
-        final HashMap<String, Integer>[] teamKillsArray = getTeamKillsArray();
-        if (teamKillsArray != null) {
-            for (int team = 0; team < TEAMS; team++) {
-                clearAllKilledPlayersFromTeam(team);
-            }
-            GuiManager.fkCounterHUD.updateDisplayText();
-            ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "Reset all final kills, good luck in deathmatch!");
-        } else {
-            ChatUtil.addChatMessage(EnumChatFormatting.RED + "No finals initialized, couldn't clear what doesnt exist");
-        }
-    }
 
     private ArrayList<String> getPlayerListInKillCounter() {
         final ArrayList<String> playerList = new ArrayList<>();
