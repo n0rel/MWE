@@ -112,6 +112,7 @@ public class CommandFKCounter extends MyAbstractCommand {
                         + EnumChatFormatting.YELLOW + "/fks" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "prints the amount of finals per team in the chat\n"
                         + EnumChatFormatting.YELLOW + "/fks players" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "prints the amount of finals per player in the chat\n"
                         + EnumChatFormatting.YELLOW + "/fks settings" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "opens the settings GUI\n"
+                        + EnumChatFormatting.YELLOW + "/fks clear" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "clears the current final kill counter\n"
                         + EnumChatFormatting.AQUA + ChatUtil.bar()
         );
     }
