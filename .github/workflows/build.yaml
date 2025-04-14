@@ -40,6 +40,6 @@ jobs:
                 path: artifacts
             - uses: ncipollo/release-action@v1
               with:
-                tag: 4.0.2-test
+                tag: 4.0.2
                 artifacts: artifacts/*
 
