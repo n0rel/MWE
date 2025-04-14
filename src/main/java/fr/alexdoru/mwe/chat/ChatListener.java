@@ -174,6 +174,10 @@ public class ChatListener {
             }
 
             if (messageSender != null) {
+                ChatComponentText message_if_nicked = ChatUtil.addAsteriskToNick(fmsg, messageSender);
+                if (message_if_nicked != null) {
+                    event.message = message_if_nicked;
+                }
                 ChatUtil.addSkinToComponent(event.message, messageSender);
             }
 

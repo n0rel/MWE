@@ -1,11 +1,13 @@
 package fr.alexdoru.mwe.chat;
 
+import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_BlockBreakAnim;
 import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.mwe.asm.interfaces.ChatComponentTextAccessor;
 import fr.alexdoru.mwe.asm.interfaces.GuiChatAccessor;
 import fr.alexdoru.mwe.asm.interfaces.NetworkPlayerInfoAccessor_ChatHeads;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
+import fr.alexdoru.mwe.utils.NameUtil;
 import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -14,6 +16,9 @@ import net.minecraft.event.HoverEvent;
 import net.minecraft.util.*;
 
 import static net.minecraft.util.EnumChatFormatting.*;
+
+
+import java.util.UUID;
 
 public class ChatUtil {
 
@@ -67,8 +72,28 @@ public class ChatUtil {
 
     public static void addSkinToComponent(IChatComponent msg, String playername) {
         if (msg instanceof ChatComponentTextAccessor && ((ChatComponentTextAccessor) msg).getSkinChatHead() == null) {
+            
             tryAddSkinToComponent(msg, playername);
         }
+    }
+
+    /*
+     * Checks if the string `playername` exists in `msg` and, if so, adds an asterisk
+     * after the players name if they are nicked
+     */
+    public static ChatComponentText addAsteriskToNick(String msg, String playername) {
+        final NetworkPlayerInfo netInfo = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(playername);
+        final UUID playerUUID = netInfo.getGameProfile().getId();
+
+        if (playerUUID != null && NameUtil.isNickedPlayer(playerUUID)) {
+            return new ChatComponentText(
+                msg.replaceFirst(
+                    playername, 
+                    playername +  EnumChatFormatting.DARK_RED + EnumChatFormatting.BOLD + " *"
+                )
+            );
+        }
+        return null;
     }
 
     public static boolean tryAddSkinToComponent(IChatComponent msg, String playername) {
