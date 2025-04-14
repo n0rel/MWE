@@ -6,10 +6,18 @@ on:
 
 jobs:
     build:
-
-        runs-on: mcr.microsoft.com/devcontainers/java:1-8-bullseye
+        runs-on: ubuntu-latest
         permissions:
             contents: read
         
         steps:
-            - run: ./gradlew build
+            - uses: actions/checkout@v4
+
+            - name: Setup JDK 8
+              uses: actions/setup-java@4
+              with:
+                java-version: 8
+                distribution: temurin
+
+            - name: Build JAR Artifact
+              run: ./gradlew build
