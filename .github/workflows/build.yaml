@@ -37,8 +37,9 @@ jobs:
               id: download-jar
               with:
                 name: mwe-jar
+                path: ${GITHUB_WORKSPACE}/artifacts
             - uses: ncipollo/release-action@v1
               with:
                 tag: 4.0.2-test
-                artifacts: ${{ steps.download-jar.outputs.download-path }}
+                artifacts: ${GITHUB_WORKSPACE}/artifacts/*
 
