@@ -2,8 +2,7 @@ name: CI - For building Jar Artifact & Publishing Release
 
 on:
     push:
-        tags:
-         - "*"
+        branches: [ 'master', 'MW-2-devops' ]
 
 jobs:
     build:
@@ -41,5 +40,6 @@ jobs:
                 name: mwe-jar
             - uses: ncipollo/release-action@v1
               with:
+                tag: 4.0.2-test
                 artifacts: ${{ steps.download-jar.outputs.download-path }}
 
