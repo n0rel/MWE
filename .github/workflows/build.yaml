@@ -1,0 +1,15 @@
+name: CI - For building Jar Artifact & Publishing Release
+
+on:
+    push:
+        branches: [ 'master', 'MW-2-devops' ]
+
+jobs:
+    build:
+
+        runs-on: mcr.microsoft.com/devcontainers/java:1-8-bullseye
+        permissions:
+            contents: read
+        
+        steps:
+            - run: ./gradlew build
