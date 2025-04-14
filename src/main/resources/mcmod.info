@@ -1,7 +1,7 @@
 [
   {
-    "modid": "mwenhancements",
-    "name": "MWE",
+    "modid": "norels_mwenhancements",
+    "name": "n0rel's MWE",
     "description": "A mod designed for PVP players with extra features for Mega Walls",
     "version": "${version}",
     "mcversion": "${mcversion}",
