@@ -2,7 +2,8 @@ name: CI - For building Jar Artifact & Publishing Release
 
 on:
     push:
-        branches: [ 'master', 'MW-2-devops' ]
+        tags:
+         - "*"
 
 jobs:
     build:
@@ -21,3 +22,24 @@ jobs:
 
             - name: Build JAR Artifact
               run: ./gradlew build
+
+            - name: Upload JAR Artifact
+              uses: actions/upload-artifact@v4
+              with:
+                name: mwe-jar
+                path: build/libs/*
+    
+    release:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+        
+        steps:
+            - uses: actions/download-artifact@v4
+              id: download-jar
+              with:
+                name: mwe-jar
+            - uses: ncipollo/release-action@v1
+              with:
+                artifacts: ${{ steps.download-jar.outputs.download-path }}
+
