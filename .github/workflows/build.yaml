@@ -2,7 +2,7 @@ name: CI - For building Jar Artifact & Publishing Release
 
 on:
     push:
-        branches: [ 'master', 'MW-2-devops' ]
+        branches: [ 'master' ]
 
 jobs:
     build:
@@ -37,9 +37,9 @@ jobs:
               id: download-jar
               with:
                 name: mwe-jar
-                path: ${GITHUB_WORKSPACE}/artifacts
+                path: artifacts
             - uses: ncipollo/release-action@v1
               with:
                 tag: 4.0.2-test
-                artifacts: ${GITHUB_WORKSPACE}/artifacts/*
+                artifacts: artifacts/*
 
